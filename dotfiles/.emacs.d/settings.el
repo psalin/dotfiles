@@ -9,12 +9,16 @@
    [default default default italic underline success warning error])
  '(ansi-color-names-vector
    ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
+ '(backup-directory-alist (quote (("." . "~/.emacs.d/emacssaves"))))
  '(c-basic-offset 4)
  '(column-number-mode t)
  '(create-lockfiles nil)
  '(custom-enabled-themes (quote (manoj-dark)))
  '(custom-file "~/.emacs.d/settings.el")
  '(desktop-load-locked-desktop t)
+ '(flycheck-cppcheck-checks
+   (quote
+    ("style" "performance" "portability" "information" "missingInclude")))
  '(global-auto-revert-mode t)
  '(go-guru-scope
    "/home/esalipe/work/go/src/github.com/sodacloudstack/api/cmd/api")
@@ -28,12 +32,12 @@
  '(next-screen-context-lines 2)
  '(package-selected-packages
    (quote
-    (projectile flycheck-yamllint flycheck groovy-mode helm-git-grep elpy highlight-chars tdd tide flymake-yaml yaml-mode go-autocomplete helm-core helm ac-helm lua-mode helm-ag neotree helm-go-package go-eldoc exec-path-from-shell helm-projectile helm-gtags go-mode company)))
- '(show-paren-mode t nil (paren))
- '(show-paren-style (quote parenthesis))
+    (yasnippet diff-hl avy helm-swoop magit helm-company function-args company-irony yasnippet-snippets smartparens diminish highlight-indent-guides company-anaconda anaconda-mode groovy flycheck-clang-tidy projectile flycheck-yamllint flycheck groovy-mode helm-git-grep elpy highlight-chars tdd tide flymake-yaml yaml-mode go-autocomplete helm-core helm ac-helm lua-mode helm-ag neotree helm-go-package go-eldoc exec-path-from-shell helm-projectile helm-gtags go-mode company)))
+ '(scroll-conservatively 10000)
+ '(scroll-step 1)
  '(tool-bar-mode nil)
- '(typescript-indent-level 2)
  '(visible-bell t)
+ '(whitespace-line-column 100)
  '(windmove-wrap-around t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
