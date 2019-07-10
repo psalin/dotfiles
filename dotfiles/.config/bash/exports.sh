@@ -2,4 +2,4 @@
 
 export EDITOR="emacs -nw -q"
 
-export LESS=MdQiC
+export LESS=MdQiCR
