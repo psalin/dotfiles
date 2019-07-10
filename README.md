@@ -15,5 +15,5 @@ git clone https://github.com/esalipe/dotfiles ~/.dotfiles
 #### Run the installation script
 
 ```shell
-.dotfiles/install.sh --dotfiles
+~/.dotfiles/install.sh --dotfiles
 ```
