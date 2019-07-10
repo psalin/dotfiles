@@ -12,7 +12,7 @@
  '(c-basic-offset 4)
  '(column-number-mode t)
  '(create-lockfiles nil)
- '(custom-enabled-themes (quote (deeper-blue)))
+ '(custom-enabled-themes (quote (manoj-dark)))
  '(custom-file "~/.emacs.d/settings.el")
  '(desktop-load-locked-desktop t)
  '(global-auto-revert-mode t)
