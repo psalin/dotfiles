@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # ls when a directory, less when a file
+unalias l 2>/dev/null
 function l() {
     if [  -z "$1" ]; then
         ls -lFa --color=auto;
