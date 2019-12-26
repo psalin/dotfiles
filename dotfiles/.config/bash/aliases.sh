@@ -39,3 +39,6 @@ alias ffile='find . | grep'
 
 alias hgrep="history|'grep'"
 alias psgrep="ps -Af|'grep'"
+
+[ -x "$(command -v kubectl)" ] && alias k='kubectl'
+[ -x "$(command -v helm)" ] && alias h='helm'
