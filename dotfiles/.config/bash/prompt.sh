@@ -1,14 +1,20 @@
 #!/bin/bash
 
-# Prompt with git branch
-function parse_git_branch {
-    git branch --no-color 2>/dev/null | 'grep' -E '[*]' | sed "s/\* \(.*\)/ (\1)/"
-}
-
-MY_TITLEBAR="\[\e]0;\u@\h: \w\$(parse_git_branch)\a\]"
-if [ "$(id -u)" == "0" ]; then
-    MY_PROMPT="(\[\e[1;31m\]\u@\h\[\e[0m\])\$(parse_git_branch) \[\e[1m\]\w\[\e[0m\]\n>"
+if [[ -r /etc/bash_completion.d/git-prompt ]]; then
+    # shellcheck source=/dev/null
+    . /etc/bash_completion.d/git-prompt
+    export GIT_PS1_SHOWDIRTYSTATE=1
 else
-    MY_PROMPT="(\[\e[1;34m\]\h\[\e[0m\])\$(parse_git_branch) \[\e[1m\]\w\[\e[0m\]\n>"
+   # Prompt with git branch
+   function __git_ps1 {
+       git branch --no-color 2>/dev/null | 'grep' -E '[*]' | sed "s/\* \(.*\)/ (\1)/"
+   }
+fi
+
+MY_TITLEBAR="\[\e]0;\u@\h: \w\$(__git_ps1)\a\]"
+if [ "$(id -u)" == "0" ]; then
+    MY_PROMPT="(\[\e[1;31m\]\u@\h\[\e[0m\])\$(__git_ps1) \[\e[1m\]\w\[\e[0m\]\n>"
+else
+    MY_PROMPT="(\[\e[1;34m\]\h\[\e[0m\])\$(__git_ps1) \[\e[1m\]\w\[\e[0m\]\n>"
 fi
 PS1="$MY_TITLEBAR""$MY_PROMPT"
