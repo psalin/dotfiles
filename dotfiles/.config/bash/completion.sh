@@ -13,5 +13,17 @@ if ! shopt -oq posix; then
   fi
 fi
 
+if [ -x "$(command -v kubectl)" ]; then
+    # shellcheck source=/dev/null
+    source <(kubectl completion bash)
+    complete -F __start_kubectl k
+fi
+
+if [ -x "$(command -v helm)" ]; then
+    # shellcheck source=/dev/null
+    source <(helm completion bash)
+    complete -F __start_helm h
+fi
+
 # shellcheck source=/dev/null
 [ -f "${HOME}"/.fzf.bash ] && source "${HOME}"/.fzf.bash
