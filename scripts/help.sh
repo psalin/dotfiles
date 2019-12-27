@@ -4,7 +4,7 @@ function show_script_help() {
     cat <<EOF
 
 Available scripts:
-  There are currently no scripts available
+  -s emacs              Install emacs
 EOF
 }
 
