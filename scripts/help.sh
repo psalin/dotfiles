@@ -5,6 +5,7 @@ function show_script_help() {
 
 Available scripts:
   -s emacs              Install emacs
+  -s fzf                Install fzf
 EOF
 }
 
