@@ -31,6 +31,7 @@ function install_basepackages() {
     fi
 
     __log_info "Installing packages ${packages_not_installed[*]}"
+    sudo apt-get update
     if ! sudo apt-get install -y "${packages_not_installed[@]}"; then
         for package in "${packages[@]}"; do
             if ! check_package "${package}"; then
