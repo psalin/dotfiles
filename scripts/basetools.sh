@@ -12,10 +12,10 @@ set -euo pipefail
 __log_info "Installing basetools"
 
 # shellcheck source=/dev/null
-. "${script_dir}"/basepackages.sh
+. "${script_dir}"/basepackages.sh || true
 
 # shellcheck source=/dev/null
-. "${script_dir}"/emacs.sh
+. "${script_dir}"/emacs.sh || true
 
 # shellcheck source=/dev/null
-. "${script_dir}"/fzf.sh
+. "${script_dir}"/fzf.sh || true
