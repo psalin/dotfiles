@@ -48,7 +48,7 @@ function _has_sudo_rights() {
 function _apt_repo_has_new_enough_version() {
     local pkgname pkgver
     pkgname=$(apt-cache show emacs | grep Depends | cut -d ' ' -f2)
-    pkgver=$(apt-cache policy "${pkgname}" | grep 'Candidate:' | cut -d ' ' -f4 | awk -F '[-+]' '{print $1}')
+    pkgver=$(apt-cache policy "${pkgname}" | grep 'Candidate:' | cut -d ' ' -f4 | cut -d: -f2- | awk -F '[-+]' '{print $1}')
     _is_version_less_than "${minimum_version}" "${pkgver}"
 }
 
