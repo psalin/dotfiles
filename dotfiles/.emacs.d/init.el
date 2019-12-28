@@ -266,4 +266,8 @@
     :ensure t)
   (yas-reload-all))
 
+;;; Load external config
+(when (file-exists-p (emacs-path "extra_init.el"))
+  (load (emacs-path "extra_init")))
+
 ;;; init.el ends here
