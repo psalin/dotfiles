@@ -204,3 +204,6 @@ bindsym XF86AudioPrev exec playerctl previous
 
 # Network Manager
 exec --no-startup-id nm-applet
+
+# Detect monitors on startup
+exec --no-startup-id autorandr --change
