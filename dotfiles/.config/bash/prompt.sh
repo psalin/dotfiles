@@ -1,7 +1,6 @@
 #!/bin/bash
 
 if [[ -r /etc/bash_completion.d/git-prompt ]]; then
-    # shellcheck source=/dev/null
     . /etc/bash_completion.d/git-prompt
     export GIT_PS1_SHOWDIRTYSTATE=1
 else

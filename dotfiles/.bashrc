@@ -2,8 +2,6 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
-# shellcheck source=/dev/null
-
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
@@ -15,7 +13,7 @@ config_dir="${HOME}/.config/bash"
 
 if [ -d "${config_dir}" ]; then
     for file in "${config_dir}"/*; do
-        source "${file}" 
+        source "${file}"
     done
 fi
 
@@ -24,6 +22,6 @@ extra_config_dir="${HOME}/.config/bash/local"
 
 if [ -d "${extra_config_dir}" ]; then
     for file in "${extra_config_dir}"/*; do
-        source "${file}" 
+        source "${file}"
     done
 fi
