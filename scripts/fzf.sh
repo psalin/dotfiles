@@ -15,7 +15,7 @@ function install_fzf() {
         git -C "${install_dir}" pull
     fi
 
-    "${HOME}"/.fzf/install --no-update-rc --no-completion --key-bindings
+    "${HOME}"/.fzf/install --no-update-rc --completion --key-bindings
 
     __log_success "fzf successfully installed"
 }
