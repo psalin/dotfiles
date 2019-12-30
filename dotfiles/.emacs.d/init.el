@@ -150,9 +150,11 @@
          ("C-x b"   . helm-mini)
          ("M-i"     . helm-semantic-or-imenu)
          (:map helm-map
-               ("<tab>" . helm-execute-persistent-action)
-               ("C-i"   . helm-execute-persistent-action)
-               ("C-z"   . helm-select-action))
+               ("<tab>"   . helm-execute-persistent-action)
+               ("<left>"  . helm-previous-source)
+               ("<right>" . helm-next-source)
+               ("C-i"     . helm-execute-persistent-action)
+               ("C-z"     . helm-select-action))
          (:map helm-command-map
                ("o" . helm-occur)))
   :config
