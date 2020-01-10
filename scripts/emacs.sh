@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-: "${minimum_version:=25.1}"
+: "${minimum_version:=26}"
 
 function _confirm() {
     read -r -p "${1:-Are you sure? [y/N]} " response
