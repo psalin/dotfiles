@@ -82,6 +82,14 @@
   :config
   (avy-setup-default))
 
+(use-package bazel-mode
+  :if (executable-find "bazel")
+  :ensure t
+  :defer t
+  :mode "BUILD\\'"
+  :hook (bazel-mode . (lambda() (when (executable-find "buildifier")
+                                  (add-hook 'before-save-hook 'bazel-format nil t)))))
+
 (use-package cc-mode
   :defer t
   :hook (c-mode-common . (lambda () (add-to-list 'write-file-functions 'delete-trailing-whitespace))))
