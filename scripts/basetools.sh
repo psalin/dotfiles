@@ -9,8 +9,8 @@ set -euo pipefail
 
 : "${script_dir:?}"
 
-__log_info "Installing basetools"
+__log_info "Installing basetools\n"
 
-. "${script_dir}"/basepackages.sh || true
-. "${script_dir}"/emacs.sh || true
-. "${script_dir}"/fzf.sh || true
+run_script basepackages
+run_script emacs
+run_script fzf
