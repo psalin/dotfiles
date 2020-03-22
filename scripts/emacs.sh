@@ -42,11 +42,12 @@ function _check_emacs_version() {
 }
 
 function _has_sudo_rights() {
-    sudo -v
+    run_cmd sudo -v
 }
 
 function _apt_repo_has_new_enough_version() {
     local pkgname pkgver
+    run_cmd sudo apt update
     pkgname=$(apt-cache show emacs | grep Depends | cut -d ' ' -f2)
     pkgver=$(apt-cache policy "${pkgname}" | grep 'Candidate:' | cut -d ' ' -f4 | cut -d: -f2- | awk -F '[-+]' '{print $1}')
     _is_version_less_than "${minimum_version}" "${pkgver}"
@@ -64,7 +65,7 @@ function _make_emacs_command_reference_newest_bin() {
 
 function _add_symlink_to_local_bin() {
     local target=$1
-    if mkdir -p "${HOME}"/bin && rm -f "${HOME}"/bin/emacs && ln -s "${target}" "${HOME}"/bin/emacs; then
+    if run_cmd mkdir -p "${HOME}"/bin && run_cmd rm -f "${HOME}"/bin/emacs && run_cmd ln -s "${target}" "${HOME}"/bin/emacs; then
         __log_info "Added symlink to newest emacs (${target}) to ${HOME}/bin"
     else
         __log_warning "Failed to make symbolic link to the newest emacs"
@@ -75,7 +76,7 @@ function _install_using_apt() {
     # Install from distribution repo if possible
     if _apt_repo_has_new_enough_version; then
         __log_info "Trying to install from distribution repository"
-        if sudo apt-get install -y emacs; then
+        if run_cmd sudo apt-get install -y emacs; then
             _make_emacs_command_reference_newest_bin
             __log_success "Emacs $(_get_current_emacs_version) successfully installed"
             return 0
@@ -85,12 +86,12 @@ function _install_using_apt() {
 
     # Otherwise try installing the latest version from ppa:kelleyk/emacs
     __log_info "Trying to install latest version from ppa:kelleyk/emacs"
-    if ! apt-cache policy | grep kelleyk/emacs; then
+    if ! apt-cache policy | run_cmd grep kelleyk/emacs; then
         if [ ! -x "$(command -v add-apt-repository)" ]; then
-            sudo apt update && sudo apt-get install -y software-properties-common
+            run_cmd sudo apt update && run_cmd sudo apt-get install -y software-properties-common
         fi
 
-        if ! sudo add-apt-repository -u ppa:kelleyk/emacs; then
+        if ! run_cmd sudo add-apt-repository -y -u ppa:kelleyk/emacs; then
             __log_warning "Failed to add ppa:kelleyk/emacs"
             return 1
         fi
@@ -100,7 +101,7 @@ function _install_using_apt() {
         _confirm "Do you want to remove all other emacses before installing? [y/N]" && sudo apt-get remove -y emacs*
     fi
 
-    if sudo apt-get install -y emacs26; then
+    if run_cmd sudo apt-get install -y emacs26; then
         _make_emacs_command_reference_newest_bin
         __log_success "Emacs $(_get_current_emacs_version) successfully installed"
     fi
@@ -113,20 +114,20 @@ function _install_using_conda() {
 
     if [ ! -d "${HOME}/miniconda" ]; then
         # Download Miniconda
-        if ! curl https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh > "${install_script}"; then
+        if ! curl -s https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh > "${install_script}"; then
             __log_error "Failed to download Miniconda"
             return 1
         fi
 
         # Install Miniconda
-        if ! (bash "${install_script}" -b -p "${install_dir}" && rm -f "${install_script}"); then
+        if ! (run_cmd bash "${install_script}" -b -p "${install_dir}" && run_cmd rm -f "${install_script}"); then
             __log_error "Failed to install Miniconda"
             return 1
         fi
     fi
 
     # Install Emacs using Miniconda
-    if ! "${install_dir}"/bin/conda install -c conda-forge emacs -y; then
+    if ! run_cmd "${install_dir}"/bin/conda install -c conda-forge emacs -y; then
         __log_error "Failed to install emacs using conda"
         return 1
     fi
