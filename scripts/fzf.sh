@@ -9,13 +9,13 @@ function install_fzf() {
 
     if [ ! -d "${install_dir}" ]; then
         __log_info "Installing fzf"
-        git clone --depth 1 https://github.com/junegunn/fzf.git "${HOME}"/.fzf
+        run_cmd git clone --depth 1 https://github.com/junegunn/fzf.git "${HOME}"/.fzf
     else
         __log_info "Updating fzf"
-        git -C "${install_dir}" pull
+        run_cmd git -C "${install_dir}" pull
     fi
 
-    "${HOME}"/.fzf/install --no-update-rc --completion --key-bindings
+    run_cmd "${HOME}"/.fzf/install --no-update-rc --completion --key-bindings
 
     __log_success "fzf successfully installed"
 }
