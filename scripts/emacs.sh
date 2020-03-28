@@ -1,6 +1,6 @@
 #!/bin/bash
-
-# Checks emacs of at least a certain version is installed and installs it if needed
+#
+# Installs emacs of at least a certain version if not yet installed
 
 set -euo pipefail
 
