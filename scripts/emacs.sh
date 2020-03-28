@@ -8,7 +8,7 @@ set -euo pipefail
 
 function _confirm() {
     read -r -p "${1:-Are you sure? [y/N]} " response
-    case "$response" in
+    case "${response}" in
         [yY][eE][sS]|[yY])
             true
             ;;
