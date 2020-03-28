@@ -33,11 +33,13 @@ function _check_emacs_version() {
     fi
 
     if _is_version_less_than "$(_get_current_emacs_version)" "${minimum_version}"; then
-        __log_info "The installed version is too old: $(_get_current_emacs_version) < ${minimum_version}"
+        __log_info "The installed version is too old:"\
+                   "$(_get_current_emacs_version) < ${minimum_version}"
         return 1
     fi
 
-    __log_success "The installed version is recent enough: $(_get_current_emacs_version) >= ${minimum_version}"
+    __log_success "The installed version is recent enough:"\
+                  "$(_get_current_emacs_version) >= ${minimum_version}"
     return 0
 }
 
@@ -49,12 +51,16 @@ function _apt_repo_has_new_enough_version() {
     local pkgname pkgver
     run_cmd sudo apt update
     pkgname=$(apt-cache show emacs | grep Depends | cut -d ' ' -f2)
-    pkgver=$(apt-cache policy "${pkgname}" | grep 'Candidate:' | cut -d ' ' -f4 | cut -d: -f2- | awk -F '[-+]' '{print $1}')
+    pkgver=$(apt-cache policy "${pkgname}" \
+                 | grep 'Candidate:' \
+                 | cut -d ' ' -f4 \
+                 | cut -d: -f2- \
+                 | awk -F '[-+]' '{print $1}')
     _is_version_less_than "${minimum_version}" "${pkgver}"
 }
 
 function _make_emacs_command_reference_newest_bin() {
-    # If there are multiple emacses and the most recent one is not default, then symlink it from ${HOME}/bin
+    # When multiple versions and the most recent one is not default, symlink it from ${HOME}/bin
     if ! _check_emacs_version; then
         if [ "$(update-alternatives --list emacs | wc -l)" -gt 1 ]; then
             newest_bin=$(update-alternatives --list emacs | sort -r | head -n1)
@@ -65,7 +71,9 @@ function _make_emacs_command_reference_newest_bin() {
 
 function _add_symlink_to_local_bin() {
     local target=$1
-    if run_cmd mkdir -p "${HOME}"/bin && run_cmd rm -f "${HOME}"/bin/emacs && run_cmd ln -s "${target}" "${HOME}"/bin/emacs; then
+    if run_cmd mkdir -p "${HOME}"/bin \
+            && run_cmd rm -f "${HOME}"/bin/emacs \
+            && run_cmd ln -s "${target}" "${HOME}"/bin/emacs; then
         __log_info "Added symlink to newest emacs (${target}) to ${HOME}/bin"
     else
         __log_warning "Failed to make symbolic link to the newest emacs"
@@ -98,7 +106,8 @@ function _install_using_apt() {
     fi
 
     if [ -x "$(command -v emacs)" ]; then
-        _confirm "Do you want to remove all other emacses before installing? [y/N]" && sudo apt-get remove -y emacs*
+        _confirm "Do you want to remove all other emacses before installing? [y/N]" \
+            && sudo apt-get remove -y emacs*
     fi
 
     if run_cmd sudo apt-get install -y emacs26; then
@@ -111,16 +120,18 @@ function _install_using_conda() {
     __log_info "Trying to install using conda"
     local install_script="${HOME}"/miniconda.sh
     local install_dir="${HOME}"/miniconda
+    local miniconda_uri="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
 
     if [ ! -d "${HOME}/miniconda" ]; then
         # Download Miniconda
-        if ! curl -s https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh > "${install_script}"; then
+        if ! curl -s "${miniconda_uri}" > "${install_script}"; then
             __log_error "Failed to download Miniconda"
             return 1
         fi
 
         # Install Miniconda
-        if ! (run_cmd bash "${install_script}" -b -p "${install_dir}" && run_cmd rm -f "${install_script}"); then
+        if ! (run_cmd bash "${install_script}" -b -p "${install_dir}" \
+                  && run_cmd rm -f "${install_script}"); then
             __log_error "Failed to install Miniconda"
             return 1
         fi
