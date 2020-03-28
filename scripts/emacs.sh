@@ -50,12 +50,12 @@ function _has_sudo_rights() {
 function _apt_repo_has_new_enough_version() {
     local pkgname pkgver
     run_cmd sudo apt update
-    pkgname=$(apt-cache show emacs | grep Depends | cut -d ' ' -f2)
-    pkgver=$(apt-cache policy "${pkgname}" \
+    pkgname="$(apt-cache show emacs | grep Depends | cut -d ' ' -f2)"
+    pkgver="$(apt-cache policy "${pkgname}" \
                  | grep 'Candidate:' \
                  | cut -d ' ' -f4 \
                  | cut -d: -f2- \
-                 | awk -F '[-+]' '{print $1}')
+                 | awk -F '[-+]' '{print $1}')"
     _is_version_less_than "${minimum_version}" "${pkgver}"
 }
 
@@ -63,7 +63,7 @@ function _make_emacs_command_reference_newest_bin() {
     # When multiple versions and the most recent one is not default, symlink it from ${HOME}/bin
     if ! _check_emacs_version; then
         if [ "$(update-alternatives --list emacs | wc -l)" -gt 1 ]; then
-            newest_bin=$(update-alternatives --list emacs | sort -r | head -n1)
+            newest_bin="$(update-alternatives --list emacs | sort -r | head -n1)"
             _add_symlink_to_local_bin "${newest_bin}"
         fi
     fi
