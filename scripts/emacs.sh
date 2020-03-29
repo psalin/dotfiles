@@ -159,6 +159,8 @@ function _install_using_conda() {
 }
 
 function install_emacs() {
+    __log_info "Installing Emacs"
+
     _check_emacs_version && return 0
 
     _has_sudo_rights && _install_using_apt && return 0
@@ -166,5 +168,4 @@ function install_emacs() {
     _install_using_conda && return 0
 }
 
-__log_info "Installing Emacs"
 install_emacs
