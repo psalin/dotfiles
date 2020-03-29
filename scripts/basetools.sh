@@ -7,8 +7,6 @@
 
 set -euo pipefail
 
-: "${script_dir:?}"
-
 __log_info "Installing basetools\n"
 
 run_script basepackages
