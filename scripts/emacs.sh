@@ -54,12 +54,14 @@ function _apt_repo_has_new_enough_version() {
     local pkgname pkgver
 
     run_cmd sudo apt update
+
     pkgname="$(apt-cache show emacs | grep Depends | cut -d ' ' -f2)"
     pkgver="$(apt-cache policy "${pkgname}" \
                  | grep 'Candidate:' \
                  | cut -d ' ' -f4 \
                  | cut -d: -f2- \
                  | awk -F '[-+]' '{print $1}')"
+
     _is_version_less_than "${MIN_VERSION}" "${pkgver}"
 }
 
@@ -79,6 +81,7 @@ function _add_symlink_to_local_bin() {
     if run_cmd mkdir -p "${HOME}"/bin \
             && run_cmd rm -f "${HOME}"/bin/emacs \
             && run_cmd ln -s "${target}" "${HOME}"/bin/emacs; then
+
         __log_info "Added symlink to newest emacs (${target}) to ${HOME}/bin"
     else
         __log_warning "Failed to make symbolic link to the newest emacs"
@@ -89,6 +92,7 @@ function _install_using_apt() {
     # Install from distribution repo if possible
     if _apt_repo_has_new_enough_version; then
         __log_info "Trying to install from distribution repository"
+
         if run_cmd sudo apt-get install -y emacs; then
             _make_emacs_command_reference_newest_bin
             __log_success "Emacs $(_get_current_emacs_version) successfully installed"
@@ -99,6 +103,7 @@ function _install_using_apt() {
 
     # Otherwise try installing the latest version from ppa:kelleyk/emacs
     __log_info "Trying to install latest version from ppa:kelleyk/emacs"
+
     if ! apt-cache policy | run_cmd grep kelleyk/emacs; then
         if [[ ! -x "$(command -v add-apt-repository)" ]]; then
             run_cmd sudo apt update && run_cmd sudo apt-get install -y software-properties-common
