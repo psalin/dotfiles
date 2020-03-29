@@ -5,6 +5,7 @@
 set -euo pipefail
 
 : "${MIN_VERSION:=26}"
+readonly MIN_VERSION
 
 function _confirm() {
     read -r -p "${1:-Are you sure? [y/N]} " response
@@ -118,9 +119,9 @@ function _install_using_apt() {
 
 function _install_using_conda() {
     __log_info "Trying to install using conda"
-    local install_script="${HOME}"/miniconda.sh
-    local install_dir="${HOME}"/miniconda
-    local miniconda_uri="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+    local -r install_script="${HOME}"/miniconda.sh
+    local -r install_dir="${HOME}"/miniconda
+    local -r miniconda_uri="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
 
     if [[ ! -d "${HOME}/miniconda" ]]; then
         # Download Miniconda
