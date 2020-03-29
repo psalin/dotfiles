@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-: "${minimum_version:=26}"
+: "${MIN_VERSION:=26}"
 
 function _confirm() {
     read -r -p "${1:-Are you sure? [y/N]} " response
@@ -28,18 +28,18 @@ function _get_current_emacs_version() {
 
 function _check_emacs_version() {
     if [[ ! -x "$(command -v emacs)" ]]; then
-        __log_info "Emacs ${minimum_version} or newer is not installed"
+        __log_info "Emacs ${MIN_VERSION} or newer is not installed"
         return 1
     fi
 
-    if _is_version_less_than "$(_get_current_emacs_version)" "${minimum_version}"; then
+    if _is_version_less_than "$(_get_current_emacs_version)" "${MIN_VERSION}"; then
         __log_info "The installed version is too old:"\
-                   "$(_get_current_emacs_version) < ${minimum_version}"
+                   "$(_get_current_emacs_version) < ${MIN_VERSION}"
         return 1
     fi
 
     __log_success "The installed version is recent enough:"\
-                  "$(_get_current_emacs_version) >= ${minimum_version}"
+                  "$(_get_current_emacs_version) >= ${MIN_VERSION}"
     return 0
 }
 
@@ -56,7 +56,7 @@ function _apt_repo_has_new_enough_version() {
                  | cut -d ' ' -f4 \
                  | cut -d: -f2- \
                  | awk -F '[-+]' '{print $1}')"
-    _is_version_less_than "${minimum_version}" "${pkgver}"
+    _is_version_less_than "${MIN_VERSION}" "${pkgver}"
 }
 
 function _make_emacs_command_reference_newest_bin() {
