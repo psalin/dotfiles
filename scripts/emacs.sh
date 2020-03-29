@@ -19,7 +19,7 @@ function _confirm() {
 }
 
 function _is_version_less_than() {
-    [ "$1" = "$(echo -e "$1\n$2" | sort -V | head -n1)" ]
+    [[ "$1" == "$(echo -e "$1\n$2" | sort -V | head -n1)" ]]
 }
 
 function _get_current_emacs_version() {
@@ -27,7 +27,7 @@ function _get_current_emacs_version() {
 }
 
 function _check_emacs_version() {
-    if [ ! -x "$(command -v emacs)" ]; then
+    if [[ ! -x "$(command -v emacs)" ]]; then
         __log_info "Emacs ${minimum_version} or newer is not installed"
         return 1
     fi
@@ -62,7 +62,7 @@ function _apt_repo_has_new_enough_version() {
 function _make_emacs_command_reference_newest_bin() {
     # When multiple versions and the most recent one is not default, symlink it from ${HOME}/bin
     if ! _check_emacs_version; then
-        if [ "$(update-alternatives --list emacs | wc -l)" -gt 1 ]; then
+        if [[ "$(update-alternatives --list emacs | wc -l)" -gt 1 ]]; then
             newest_bin="$(update-alternatives --list emacs | sort -r | head -n1)"
             _add_symlink_to_local_bin "${newest_bin}"
         fi
@@ -95,7 +95,7 @@ function _install_using_apt() {
     # Otherwise try installing the latest version from ppa:kelleyk/emacs
     __log_info "Trying to install latest version from ppa:kelleyk/emacs"
     if ! apt-cache policy | run_cmd grep kelleyk/emacs; then
-        if [ ! -x "$(command -v add-apt-repository)" ]; then
+        if [[ ! -x "$(command -v add-apt-repository)" ]]; then
             run_cmd sudo apt update && run_cmd sudo apt-get install -y software-properties-common
         fi
 
@@ -105,7 +105,7 @@ function _install_using_apt() {
         fi
     fi
 
-    if [ -x "$(command -v emacs)" ]; then
+    if [[ -x "$(command -v emacs)" ]]; then
         _confirm "Do you want to remove all other emacses before installing? [y/N]" \
             && sudo apt-get remove -y emacs*
     fi
@@ -122,7 +122,7 @@ function _install_using_conda() {
     local install_dir="${HOME}"/miniconda
     local miniconda_uri="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
 
-    if [ ! -d "${HOME}/miniconda" ]; then
+    if [[ ! -d "${HOME}/miniconda" ]]; then
         # Download Miniconda
         if ! curl -s "${miniconda_uri}" > "${install_script}"; then
             __log_error "Failed to download Miniconda"
