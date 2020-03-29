@@ -7,7 +7,7 @@ set -euo pipefail
 function install_fzf() {
     local -r install_dir="${HOME}"/.fzf
 
-    if [ ! -d "${install_dir}" ]; then
+    if [[ ! -d "${install_dir}" ]]; then
         __log_info "Installing fzf"
         run_cmd git clone --depth 1 https://github.com/junegunn/fzf.git "${HOME}"/.fzf
     else
