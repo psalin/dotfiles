@@ -8,6 +8,8 @@ set -euo pipefail
 readonly MIN_VERSION
 
 function _confirm() {
+    local response
+
     read -r -p "${1:-Are you sure? [y/N]} " response
     case "${response}" in
         [yY][eE][sS]|[yY])
@@ -50,6 +52,7 @@ function _has_sudo_rights() {
 
 function _apt_repo_has_new_enough_version() {
     local pkgname pkgver
+
     run_cmd sudo apt update
     pkgname="$(apt-cache show emacs | grep Depends | cut -d ' ' -f2)"
     pkgver="$(apt-cache policy "${pkgname}" \
@@ -71,7 +74,8 @@ function _make_emacs_command_reference_newest_bin() {
 }
 
 function _add_symlink_to_local_bin() {
-    local target=$1
+    local target="$1"
+
     if run_cmd mkdir -p "${HOME}"/bin \
             && run_cmd rm -f "${HOME}"/bin/emacs \
             && run_cmd ln -s "${target}" "${HOME}"/bin/emacs; then
@@ -118,10 +122,11 @@ function _install_using_apt() {
 }
 
 function _install_using_conda() {
-    __log_info "Trying to install using conda"
     local -r install_script="${HOME}"/miniconda.sh
     local -r install_dir="${HOME}"/miniconda
     local -r miniconda_uri="https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh"
+
+    __log_info "Trying to install using conda"
 
     if [[ ! -d "${HOME}/miniconda" ]]; then
         # Download Miniconda
