@@ -5,7 +5,7 @@
 set -euo pipefail
 
 function install_fzf() {
-    local install_dir="${HOME}"/.fzf
+    local -r install_dir="${HOME}"/.fzf
 
     if [ ! -d "${install_dir}" ]; then
         __log_info "Installing fzf"
