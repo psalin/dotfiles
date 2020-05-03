@@ -8,11 +8,11 @@
 set -euo pipefail
 
 function install_basepackages() {
-    local -r packages=(bash-completion
+    local -r base_packages=(bash-completion
                        curl
                        global)
 
-    install_packages "${packages[@]}"
+    install_packages "${base_packages[@]}"
 }
 
 install_basepackages
