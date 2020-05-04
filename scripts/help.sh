@@ -6,6 +6,7 @@ function show_script_help() {
 Available scripts:
   -s basetools          Runs scripts basepackages, emacs and fzf
 
+  -s asdf               Install asdf
   -s basepackages       Installs base packages
   -s emacs              Install emacs
   -s fzf                Install fzf
