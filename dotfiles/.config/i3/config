@@ -202,6 +202,9 @@ bindsym XF86AudioPause exec playerctl pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
+# Avoid MS Teams notifications to go to a new window and grab focus
+for_window [title="Microsoft Teams Notification"] floating enable, no_focus
+
 # Network Manager
 exec --no-startup-id nm-applet
 
