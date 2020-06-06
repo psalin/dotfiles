@@ -44,11 +44,24 @@ if [[ -x "$(command -v kubectl)" ]]; then
              kubectl get pods --no-headers -o wide "$@" | fzf | cut -d ' ' -f1
          }
 
+         # shellcheck disable=SC2120
+         kpa() {
+             kubectl get pods --no-headers -o wide -A "$@" | fzf | tr -s ' ' | cut -d ' ' -f-2
+         }
+
          kd() {
              local pod
              pod="$(kp)"
 
              local cmd=(kubectl describe pod "$@" "${pod}")
+             _run_cmd "${FUNCNAME[0]} ${*}" "${cmd[*]}"
+         }
+
+         kda() {
+             local ns_and_pod
+             ns_and_pod="$(kpa)"
+
+             local cmd=(kubectl describe pod "$@" -n "${ns_and_pod}")
              _run_cmd "${FUNCNAME[0]} ${*}" "${cmd[*]}"
          }
 
@@ -60,12 +73,29 @@ if [[ -x "$(command -v kubectl)" ]]; then
              _run_cmd "${FUNCNAME[0]} ${*}" "${cmd[*]}"
          }
 
+         kla() {
+             local ns_and_pod
+             ns_and_pod="$(kpa)"
+
+             local cmd=(kubectl logs "$@" -n "${ns_and_pod}")
+             _run_cmd "${FUNCNAME[0]} ${*}" "${cmd[*]}"
+         }
+
          kx() {
              local pod
              pod="$(kp)"
 	     local pod_cmd=("${@:-bash}")
 
              local cmd=(kubectl exec -it "${pod}" -- "${pod_cmd[*]}")
+             _run_cmd "${FUNCNAME[0]} ${*}" "${cmd[*]}"
+         }
+
+         kxa() {
+             local ns_and_pod
+             ns_and_pod="$(kpa)"
+	     local pod_cmd=("${@:-bash}")
+
+             local cmd=(kubectl exec -it -n "${ns_and_pod}" -- "${pod_cmd[*]}")
              _run_cmd "${FUNCNAME[0]} ${*}" "${cmd[*]}"
          }
      fi
