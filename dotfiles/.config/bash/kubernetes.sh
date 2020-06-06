@@ -23,10 +23,7 @@ if [[ -x "$(command -v kubectl)" ]]; then
      set_kubeconfig
 
      kgp() {
-         local attr
-         IFS=" " read -r -a attr <<< "${@:- -o wide}"
-         readonly attr
-         kubectl get pods "${attr[@]}"
+         kubectl get pods -o wide "$@"
      }
 
      if [[ -x "$(command -v fzf)" ]]; then
