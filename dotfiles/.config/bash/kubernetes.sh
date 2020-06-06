@@ -27,13 +27,14 @@ if [[ -x "$(command -v kubectl)" ]]; then
      }
 
      if [[ -x "$(command -v fzf)" ]]; then
+         # shellcheck disable=SC2120
          kp() {
-             kubectl get pods --no-headers "$@" | fzf | cut -d ' ' -f1
+             kubectl get pods --no-headers -o wide "$@" | fzf | cut -d ' ' -f1
          }
 
          kd() {
              local pod
-             pod="$(kp -o wide)"
+             pod="$(kp)"
 
              local cmd=(kubectl describe pod "$@" "${pod}")
              echo "${cmd[*]}"
@@ -44,7 +45,7 @@ if [[ -x "$(command -v kubectl)" ]]; then
 
          kl() {
              local pod
-             pod="$(kp -o wide)"
+             pod="$(kp)"
 
              local cmd=(kubectl logs "$@" "${pod}")
              echo "${cmd[*]}"
@@ -55,7 +56,7 @@ if [[ -x "$(command -v kubectl)" ]]; then
 
          kx() {
              local pod
-	     pod="$(kp -o wide)"
+	     pod="$(kp)"
 	     local pod_cmd=("${@:-bash}")
 
              local cmd=(kubectl exec -it "${pod}" -- "${pod_cmd[*]}")
