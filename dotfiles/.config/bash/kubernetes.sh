@@ -27,6 +27,18 @@ if [[ -x "$(command -v kubectl)" ]]; then
      }
 
      if [[ -x "$(command -v fzf)" ]]; then
+         # Prints, run and stores command to the history
+         _run_cmd() {
+             local orig_cmd="$1"
+             shift
+             local cmd=("$@")
+
+             history -s "${orig_cmd}"
+             history -s "${cmd[*]}"
+             echo "${cmd[*]}"
+             ${cmd[*]}
+         }
+
          # shellcheck disable=SC2120
          kp() {
              kubectl get pods --no-headers -o wide "$@" | fzf | cut -d ' ' -f1
@@ -37,10 +49,7 @@ if [[ -x "$(command -v kubectl)" ]]; then
              pod="$(kp)"
 
              local cmd=(kubectl describe pod "$@" "${pod}")
-             echo "${cmd[*]}"
-             history -s "${FUNCNAME[0]} ${*}"
-             history -s "${cmd[*]}"
-             ${cmd[*]}
+             _run_cmd "${FUNCNAME[0]} ${*}" "${cmd[*]}"
          }
 
          kl() {
@@ -48,22 +57,16 @@ if [[ -x "$(command -v kubectl)" ]]; then
              pod="$(kp)"
 
              local cmd=(kubectl logs "$@" "${pod}")
-             echo "${cmd[*]}"
-             history -s "${FUNCNAME[0]} ${*}"
-             history -s "${cmd[*]}"
-             ${cmd[*]}
+             _run_cmd "${FUNCNAME[0]} ${*}" "${cmd[*]}"
          }
 
          kx() {
              local pod
-	     pod="$(kp)"
+             pod="$(kp)"
 	     local pod_cmd=("${@:-bash}")
 
              local cmd=(kubectl exec -it "${pod}" -- "${pod_cmd[*]}")
-             echo "${cmd[*]}"
-             history -s "${FUNCNAME[0]} ${*}"
-             history -s "${cmd[*]}"
-             ${cmd[*]}
+             _run_cmd "${FUNCNAME[0]} ${*}" "${cmd[*]}"
          }
      fi
 fi
