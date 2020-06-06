@@ -36,27 +36,36 @@ if [[ -x "$(command -v kubectl)" ]]; then
 
          kd() {
              local pod
-	     pod="$(kp -o wide)"
+             pod="$(kp -o wide)"
 
-	     echo kubectl describe pod "$@" "${pod}"
-	     kubectl describe pod ${@:+"$@"} "${pod}"
+             local cmd=(kubectl describe pod "$@" "${pod}")
+             echo "${cmd[*]}"
+             history -s "${FUNCNAME[0]} ${*}"
+             history -s "${cmd[*]}"
+             ${cmd[*]}
          }
 
          kl() {
              local pod
-	     pod="$(kp -o wide)"
+             pod="$(kp -o wide)"
 
-	     echo kubectl logs -f "$@" "${pod}"
-	     kubectl logs -f ${@:+"$@"} "${pod}"
+             local cmd=(kubectl logs "$@" "${pod}")
+             echo "${cmd[*]}"
+             history -s "${FUNCNAME[0]} ${*}"
+             history -s "${cmd[*]}"
+             ${cmd[*]}
          }
 
          kx() {
              local pod
 	     pod="$(kp -o wide)"
-	     local cmd=("${@:-bash}")
+	     local pod_cmd=("${@:-bash}")
 
-	     echo kubectl exec -it "${pod}" -- "${cmd[@]}"
-	     kubectl exec -it "${pod}" -- "${cmd[@]}"
+             local cmd=(kubectl exec -it "${pod}" -- "${pod_cmd[*]}")
+             echo "${cmd[*]}"
+             history -s "${FUNCNAME[0]} ${*}"
+             history -s "${cmd[*]}"
+             ${cmd[*]}
          }
      fi
 fi
