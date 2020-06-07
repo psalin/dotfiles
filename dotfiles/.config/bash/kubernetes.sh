@@ -8,6 +8,8 @@ if [[ -x "$(command -v kubectl)" ]]; then
      # Add available kubeconfigs to KUBECONFIG for easy switching
      set_kubeconfig() {
          local entry
+         local kubeconfigs
+
          for entry in "$HOME/.kube/configs"/*
          do
              # Get files which do not include "skip"
@@ -29,9 +31,9 @@ if [[ -x "$(command -v kubectl)" ]]; then
      if [[ -x "$(command -v fzf)" ]]; then
          # Prints, run and stores command to the history
          _run_cmd() {
-             local orig_cmd="$1"
+             local -r orig_cmd="$1"
              shift
-             local cmd=("$@")
+             local -r cmd=("$@")
 
              history -s "${orig_cmd}"
              history -s "${cmd[*]}"
