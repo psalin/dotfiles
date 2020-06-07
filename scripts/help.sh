@@ -10,6 +10,7 @@ Available scripts:
   -s basepackages       Install base packages
   -s emacs              Install emacs
   -s fzf                Install fzf
+  -s kube-ps1           Install kube-ps1
 EOF
 }
 
