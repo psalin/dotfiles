@@ -7,7 +7,7 @@ Available scripts:
   -s basetools          Runs scripts basepackages, emacs and fzf
 
   -s asdf               Install asdf
-  -s basepackages       Installs base packages
+  -s basepackages       Install base packages
   -s emacs              Install emacs
   -s fzf                Install fzf
 EOF
