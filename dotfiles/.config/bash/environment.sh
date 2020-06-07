@@ -29,7 +29,7 @@ shopt -s no_empty_cmd_completion
 shopt -s histappend
 
 # Features supported by version 4
-if [ "${BASH_VERSINFO[0]}" -gt 3 ]; then
+if [[ "${BASH_VERSINFO[0]}" -gt 3 ]]; then
 
     # List files when pressing TAB on empty line
     complete -f -E

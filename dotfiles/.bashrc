@@ -11,7 +11,7 @@ esac
 # Source bashrc configuration files
 config_dir="${HOME}/.config/bash"
 
-if [ -d "${config_dir}" ]; then
+if [[ -d "${config_dir}" ]]; then
     for file in "${config_dir}"/*; do
         source "${file}"
     done
@@ -20,7 +20,7 @@ fi
 # Source extra bashrc configuration files
 extra_config_dir="${HOME}/.config/bash/local"
 
-if [ -d "${extra_config_dir}" ]; then
+if [[ -d "${extra_config_dir}" ]]; then
     for file in "${extra_config_dir}"/*; do
         source "${file}"
     done
