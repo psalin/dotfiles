@@ -20,8 +20,6 @@
    (quote
     ("style" "performance" "portability" "information" "missingInclude")))
  '(global-auto-revert-mode t)
- '(go-guru-scope
-   "/home/esalipe/work/go/src/github.com/sodacloudstack/api/cmd/api")
  '(helm-ag-insert-at-point (quote symbol))
  '(helm-autoresize-mode t)
  '(indent-tabs-mode nil)

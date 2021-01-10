@@ -9,7 +9,7 @@ Quick dotfile installation and environment setup.
 The repository can be cloned into any directory, personally I prefer `~/.dotfiles`.
 
 ```shell
-git clone https://github.com/esalipe/dotfiles ~/.dotfiles
+git clone https://github.com/psalin/dotfiles ~/.dotfiles
 ```
 
 #### Run the installation script
