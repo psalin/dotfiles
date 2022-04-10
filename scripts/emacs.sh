@@ -51,18 +51,35 @@ function _has_sudo_rights() {
 }
 
 function _apt_repo_has_new_enough_version() {
-    local pkgname pkgver
+    local pkgname="$1"
+    local pkgver
 
     run_cmd sudo apt update
 
-    pkgname="$(apt-cache show emacs | grep Depends | cut -d ' ' -f2)"
+    # If metapackage, detect real package
+    if [[ "${pkgname}" == "emacs" ]]; then
+        pkgname="$(apt-cache show emacs | grep Depends | cut -d ' ' -f2)"
+    fi
     pkgver="$(apt-cache policy "${pkgname}" \
                  | grep 'Candidate:' \
                  | cut -d ' ' -f4 \
                  | cut -d: -f2- \
                  | awk -F '[-+]' '{print $1}')"
 
-    _is_version_less_than "${MIN_VERSION}" "${pkgver}"
+    if [[ ! -x "$(command -v emacs)" ]]; then
+        if _is_version_less_than "${pkgver}" "${MIN_VERSION}"; then
+            __log_info "APT version is not newer than the minimum required version: ${pkgver}"
+            return 1
+        fi
+        return 0
+    fi
+
+    if _is_version_less_than "${pkgver}" "$(_get_current_emacs_version)"; then
+        __log_info "APT version is not newer than the current version: ${pkgver}"
+        return 1
+    fi
+
+    __log_info "Found newer version: ${pkgver}"
 }
 
 function _make_emacs_command_reference_newest_bin() {
@@ -90,8 +107,8 @@ function _add_symlink_to_local_bin() {
 
 function _install_using_apt() {
     # Install from distribution repo if possible
-    if _apt_repo_has_new_enough_version; then
-        __log_info "Trying to install from distribution repository"
+    if _apt_repo_has_new_enough_version "emacs"; then
+        __log_info "Trying to install/update from distribution repository"
 
         if run_cmd sudo apt-get install -y emacs; then
             _make_emacs_command_reference_newest_bin
@@ -102,8 +119,6 @@ function _install_using_apt() {
     fi
 
     # Otherwise try installing the latest version from ppa:kelleyk/emacs
-    __log_info "Trying to install latest version from ppa:kelleyk/emacs"
-
     if ! apt-cache policy | run_cmd grep kelleyk/emacs; then
         if [[ ! -x "$(command -v add-apt-repository)" ]]; then
             run_cmd sudo apt update && run_cmd sudo apt-get install -y software-properties-common
@@ -115,14 +130,20 @@ function _install_using_apt() {
         fi
     fi
 
-    if [[ -x "$(command -v emacs)" ]]; then
-        _confirm "Do you want to remove all other emacses before installing? [y/N]" \
-            && sudo apt-get remove -y emacs*
-    fi
+    local -r pkelley_version=emacs27
+    if _apt_repo_has_new_enough_version "${pkelley_version}"; then
+        __log_info "Trying to install/update latest version from ppa:kelleyk/emacs"
 
-    if run_cmd sudo apt-get install -y emacs26; then
-        _make_emacs_command_reference_newest_bin
-        __log_success "Emacs $(_get_current_emacs_version) successfully installed"
+        if [[ -x "$(command -v emacs)" ]]; then
+            _confirm "Do you want to remove all other APT emacses before installing? [y/N]" \
+                && run_cmd sudo apt-get remove -y emacs*
+            sudo apt-get remove -y emacs*
+        fi
+
+        if run_cmd sudo apt-get install -y "${pkelley_version}"; then
+            _make_emacs_command_reference_newest_bin
+            __log_success "Emacs $(_get_current_emacs_version) successfully installed"
+        fi
     fi
 }
 
@@ -164,11 +185,11 @@ function _install_using_conda() {
 }
 
 function install_emacs() {
-    __log_info "Installing Emacs"
-
-    _check_emacs_version && return 0
+    __log_info "Installing/updating Emacs"
+    __log_info "Current Emacs version: $(_get_current_emacs_version)"
 
     _has_sudo_rights && _install_using_apt && return 0
+    _check_emacs_version && return 0
 
     _install_using_conda && return 0
 }
