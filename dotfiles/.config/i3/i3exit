@@ -1,8 +1,7 @@
 #!/bin/bash
 # /usr/bin/i3exit
 
-# with openrc use loginctl
-[[ $(cat /proc/1/comm) == "systemd" ]] && logind=systemctl || logind=loginctl
+logind=systemctl
 
 case "$1" in
     lock)
@@ -10,9 +9,6 @@ case "$1" in
         ;;
     logout)
         i3-msg exit
-        ;;
-    switch_user)
-        dm-tool switch-to-greeter
         ;;
     suspend)
         "${HOME}"/.config/i3/lock.sh && $logind suspend
@@ -28,7 +24,7 @@ case "$1" in
         ;;
     *)
         echo "== ! i3exit: missing or invalid argument ! =="
-        echo "Try again with: lock | logout | switch_user | suspend | hibernate | reboot | shutdown"
+        echo "Try again with: lock | logout | suspend | hibernate | reboot | shutdown"
         exit 2
 esac
 
