@@ -7,4 +7,4 @@ set -euo pipefail
 __log_info "Installing all\n"
 
 run_script all-nonui || true
-run_script i3 || true
+run_script desktop || true
