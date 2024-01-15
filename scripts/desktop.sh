@@ -12,6 +12,8 @@
 #   autorandr
 # sound control
 #   pavucontrol
+# backlight control
+#   light
 
 set -euo pipefail
 
@@ -22,7 +24,8 @@ function install_desktop() {
                                autorandr
                                imagemagick
                                scrot
-                               pavucontrol)
+                               pavucontrol
+                               light)
 
     install_packages "${desktop_packages[@]}"
 }
