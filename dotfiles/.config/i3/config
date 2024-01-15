@@ -181,6 +181,21 @@ bar {
 # Re-detect monitors
 bindsym $mod+m exec autorandr --change
 
+## Set keyboard button for manual load of display profiles
+# There is a problem with autorandr, not loading the default profile (laptop only)
+# when the external outputs are disconnected. The display button force-loads the
+# default profile
+set $mode_display Display: (1) default, (2) detected
+mode "$mode_display" {
+    bindsym 1 exec --no-startup-id autorandr --force --load default, mode "default"
+    bindsym 2 exec --no-startup-id autorandr --change, mode "default"
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym XF86Display mode "$mode_display"
+
 # Blur lock
 bindsym $mod+F12 exec $HOME/.config/i3/lock.sh
 
