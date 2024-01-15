@@ -38,7 +38,7 @@ if [[ -x "$(command -v kubectl)" ]]; then
              history -s "${orig_cmd}"
              history -s "${cmd[*]}"
              echo "${cmd[*]}"
-             ${cmd[*]}
+             eval "${cmd[*]}"
          }
 
          # shellcheck disable=SC2120
