@@ -211,6 +211,9 @@ bindsym XF86MonBrightnessDown exec light -U 5 # decrease screen brightness
 
 # Touchpad controls
 bindsym XF86TouchpadToggle exec $HOME/.config/i3/toggletouchpad.sh # toggle touchpad
+bindsym $mod+F2 exec $HOME/.config/i3/toggletouchpad.sh # alternative key
+# Enable middle click by tap for touchpad
+exec xinput set-prop 16 "libinput Tapping Enabled" 1
 
 # Media player controls
 bindsym XF86AudioPlay exec playerctl play-pause
