@@ -13,7 +13,6 @@ Available scripts:
   -s desktop            Install i3 and other desktop related software
   -s emacs              Install emacs
   -s fzf                Install fzf
-  -s kube-ps1           Install kube-ps1
 EOF
 }
 
