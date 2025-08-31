@@ -13,7 +13,9 @@ config_dir="${HOME}/.config/bash"
 
 if [[ -d "${config_dir}" ]]; then
     for file in "${config_dir}"/*; do
-        source "${file}"
+        if [ -f "${file}" ]; then
+            source "${file}"
+        fi
     done
 fi
 
@@ -22,6 +24,8 @@ extra_config_dir="${HOME}/.config/bash/local"
 
 if [[ -d "${extra_config_dir}" ]]; then
     for file in "${extra_config_dir}"/*; do
-        source "${file}"
+        if [ -f "${file}" ]; then
+            source "${file}"
+        fi
     done
 fi
