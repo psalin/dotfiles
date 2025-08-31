@@ -70,7 +70,7 @@ function utils::install_using_snap() {
 #   Output dir, absolute path
 #   Current version of the tool, or empty if not installed
 # Outputs:
-#   The full path of the downlaoded package if successful
+#   The full path of the downloaded package if successful
 # Returns:
 #   0 if the download was successful or already up-to-date, otherwise 1
 function utils::download_github_release() {
