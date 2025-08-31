@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-__log_info "Installing all\n"
+__log_info "Installing all tools\n"
 
 run_script all-nonui || true
 run_script desktop || true
