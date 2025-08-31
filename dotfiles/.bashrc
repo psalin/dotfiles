@@ -2,6 +2,12 @@
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
+# Explicitly set XDG variables
+export XDG_CONFIG_HOME="${HOME}"/.config
+export XDG_CACHE_HOME="${HOME}"/.cache
+export XDG_DATA_HOME="${HOME}"/.local/share
+export XDG_STATE_HOME="${HOME}"/.local/state
+
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
