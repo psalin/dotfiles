@@ -1,7 +1,6 @@
 #!/bin/bash
 
-if [[ -f "${HOME}"/.fzf.bash ]]; then
-    source ~/.fzf.bash
-
-    export FZF_DEFAULT_OPTS='-e'
+if [[ -x "$(command -v fzf)" ]]; then
+    eval "$(fzf --bash)"
+    export FZF_DEFAULT_OPTS='--exact'
 fi
