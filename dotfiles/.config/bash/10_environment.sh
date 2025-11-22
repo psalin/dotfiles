@@ -11,6 +11,14 @@ shopt -s histappend
 HISTSIZE=10000
 HISTFILESIZE=20000
 
+# Immediately append each command to the history file, this way shells
+# won't overwrite each others history. The history file will be mixed
+# with commands from all shells but the purpose is not to preserve
+# the order but to have all commands stored and searchable with fzf.
+# To transfer a command written in one shell to another mid-shell
+# use history -r.
+PROMPT_COMMAND='history -a'
+
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
@@ -24,9 +32,6 @@ shopt -s checkwinsize
 
 # Do not list all commands when pressing tab on an empty line
 shopt -s no_empty_cmd_completion
-
-# Append to history file instead of overwriting
-shopt -s histappend
 
 # Features supported by version 4
 if [[ "${BASH_VERSINFO[0]}" -gt 3 ]]; then
