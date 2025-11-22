@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Put bash history file under XDG
+export HISTFILE="${XDG_STATE_HOME:-$HOME/.local/state}/bash/history"
 # Use emacs as default editor
 export EDITOR="emacs -nw -q"
 # Default less options

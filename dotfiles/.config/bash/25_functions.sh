@@ -17,3 +17,18 @@ function less_newest()
 {
     find "$1" -maxdepth 1 -type "f" -printf "%T@ %p\n" | sort -n | cut -d' ' -f 2- | tail -n 1 | xargs less
 }
+
+# De-duplicates the bash history file
+function dedup_history() {
+    local histfile="${HISTFILE}"
+    local tmpfile="${histfile}.$$"
+
+    tac "${histfile}" | awk '!seen[$0]++' | tac > "${tmpfile}" && 'cp' -f "${histfile}" "${histfile}".bck && 'mv' -f "${tmpfile}" "${histfile}"
+}
+
+# Stuff to do on shell exit
+function on_exit() {
+    dedup_history # De-duplicate history file
+}
+
+trap on_exit EXIT
