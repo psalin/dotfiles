@@ -12,6 +12,8 @@ Available scripts:
   -s basepackages                       Install base packages
   -s desktop                            Install i3 and other desktop related software
   -s emacs                              Install emacs
+  -s tmux                               Install tmux
+  -s zoxide                             Install zoxide
 EOF
 }
 

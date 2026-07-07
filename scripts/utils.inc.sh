@@ -12,7 +12,10 @@ set -euo pipefail
 # Returns:
 #   0 if the first version is newer than the second, otherwise 1
 function utils::is_version_newer_than() {
-    [[ "$1" != "$(echo -e "$1\n$2" | sort -V | head -n1)" ]]
+    local version1="${1#v}"
+    local version2="${2#v}"
+
+    [[ "${version1}" != "$(echo -e "${version1}\n${version2}" | sort -V | head -n1)" ]]
 }
 
 #######################################
@@ -33,6 +36,10 @@ function utils::install_using_snap() {
     __log_info "Trying to install ${toolname} using snap"
     
     if [[ -x "$(command -v snap)" ]]; then
+        if ! run_cmd snap info "${toolname}"; then
+            __log_warning "Couldn't install ${toolname} using snap, ${toolname} not available"
+            return 1
+        fi
         snap_version=$(snap info "${toolname}" | awk '/^  latest\/stable:/ {print $2}')
         if ! utils::is_version_newer_than "${snap_version}" "${current_version}"; then
             __log_info "Version found: ${snap_version}. The current version ${current_version} of ${toolname} is already up-to-date."
@@ -103,10 +110,10 @@ function utils::download_github_release() {
     fi
 
     if ! utils::is_version_newer_than "${latest_version}" "${current_version}"; then
-        __log_info "Version found: ${latest_version}. The current version ${current_version} of ${github_project}/${github_repo} is already up-to-date."
+        __log_info "Version found: ${latest_version}. The current version ${current_version} of ${github_repo} is already up-to-date."
         return 0
     else
-        __log_info "Version found: ${latest_version}. Updating the current version ${current_version} of ${github_project}/${github_repo}."
+        __log_info "Version found: ${latest_version}. Updating the current version ${current_version} of ${github_repo}."
     fi
 
     # Fetch release page HTML
@@ -123,6 +130,51 @@ function utils::download_github_release() {
     # Download the asset and extract the binary to .local/bin
     full_asset_url="https://github.com${asset_url}"
     __log_info "Downloading asset: ${full_asset_url}"
+
+    pushd "${output_dir}" > /dev/null
+    if ! run_cmd curl -L -O "${full_asset_url}"; then
+        __log_error "Failed to download ${full_asset_url}"
+        popd > /dev/null
+        return 1
+    fi
+    echo "$(pwd)/$(basename "${full_asset_url}")"
+    popd > /dev/null
+    return 0
+}
+
+#######################################
+# Downloads a github tarball based on tag
+#   The download is only done if the version is newer than the current version
+# Arguments:
+#   Github project
+#   Github repo
+#   Output dir, absolute path
+#   Current version of the tool, or empty if not installed
+# Outputs:
+#   The full path of the downloaded package if successful
+# Returns:
+#   0 if the download was successful or already up-to-date, otherwise 1
+function utils::download_github_tag_tarball() {
+    local -r github_project="$1"
+    local -r github_repo="$2"
+    local -r output_dir="$3"
+    local -r current_version="${4:-}"
+    local latest_version
+    local asset_url
+    local full_asset_url
+
+    asset_url=$(curl -s "https://github.com/${github_project}/${github_repo}/tags" | \
+                     grep -oP '/[^/]+/[^/]+/archive/refs/tags/[^"]+\.tar\.gz' | head -1)
+    latest_version=$(echo "${asset_url}" | grep -oP '[0-9]+\.[0-9]+(\.[0-9]+)?')
+
+    if ! utils::is_version_newer_than "${latest_version}" "${current_version}"; then
+        __log_info "Version found: ${latest_version}. The current version ${current_version} of ${github_repo} is already up-to-date."
+        return 0
+    else
+        __log_info "Version found: ${latest_version}. Updating the current version ${current_version} of ${github_repo}."
+    fi
+
+    full_asset_url="https://github.com${asset_url}"
 
     pushd "${output_dir}" > /dev/null
     if ! run_cmd curl -L -O "${full_asset_url}"; then
