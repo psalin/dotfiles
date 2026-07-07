@@ -14,7 +14,7 @@
 (defun my-helm-git-grep (not-all)
   (interactive "P")
   (helm-grep-git-1 default-directory t))
-(global-set-key (kbd "C-c g") 'my-helm-grep-do-git-grep)
+(global-set-key (kbd "C-c g") 'my-helm-git-grep)
 
 ;;; Bootstrap
 
