@@ -78,6 +78,7 @@
 
 ;; --- Face/Appearance Settings ---
 ;; Use terminal's background color instead of forcing one
-(set-face-attribute 'default nil :background "unspecified-bg")
+(unless window-system
+  (set-face-attribute 'default nil :background "unspecified-bg"))
 
 ;;; settings.el ends here
