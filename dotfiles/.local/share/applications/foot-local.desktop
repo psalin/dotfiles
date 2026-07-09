@@ -1,0 +1,13 @@
+# Opens a foot terminal that automatically attaches to tmux
+[Desktop Entry]
+Type=Application
+Exec=foot --app-id=foot-local tmux new -A -s local
+Icon=foot
+Terminal=false
+Categories=System;TerminalEmulator;
+Keywords=shell;prompt;command;commandline;
+
+Name=Foot Local Tmux
+GenericName=Terminal
+Comment=A wayland native terminal emulator
+StartupWMClass=foot
