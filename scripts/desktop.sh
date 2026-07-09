@@ -1,15 +1,8 @@
 #!/bin/bash
 
 # Installs the following packages:
-# i3wm packages
-#   i3
-#   i3blocks
-# custom i3 locking
-#   imagemagick
-#   scrot
-# screen setup tools
-#   arandr
-#   autorandr
+# regolith packages
+#   regolith-desktop regolith-session-sway regolith-sway-gaps
 # sound control
 #   pavucontrol
 # backlight control
@@ -18,12 +11,9 @@
 set -euo pipefail
 
 function install_desktop() {
-    local -r desktop_packages=(i3
-                               i3blocks
-                               arandr
-                               autorandr
-                               imagemagick
-                               scrot
+    local -r desktop_packages=(regolith-desktop
+			       regolith-session-sway
+			       regolith-sway-gaps
                                pavucontrol
                                light)
 
