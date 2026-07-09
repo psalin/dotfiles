@@ -129,6 +129,30 @@ function install_from_sources() {
     cd ..
 }
 
+function install_tmux_tpm() {
+    local tpm_dir="$HOME/.config/tmux/plugins/tpm"
+
+    if [ -d "$tpm_dir" ]; then
+        # Update existing installation
+        if git -C "$tpm_dir" pull; then
+            __log_success "tmux tpm updated, please reload tmux."
+	    return 0
+        else
+            __log_error "Failed to update tmux tpm."
+	    return 1
+        fi
+    else
+        # Fresh install
+        if git clone https://github.com/tmux-plugins/tpm "$tpm_dir"; then
+            __log_success "tmux tpm installed, please reload tmux."
+	    return 0
+        else
+            __log_error "Failed to install tmux tpm."
+	    return 1
+        fi
+    fi
+}
+
 function install_tmux() {
     __log_info "Installing/updating tmux"
 
@@ -137,4 +161,7 @@ function install_tmux() {
     query_install "Install using AppImage" && install_using_appimage && return 0
 }
 
-install_tmux
+install_tmux && install_tmux_tpm
+
+
+
