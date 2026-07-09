@@ -1,0 +1,13 @@
+# regolith-powerd fails to enable just power save, this implements an own swayidle command
+set_from_resource $wm.power.dim_timeout wm.power.dim_timeout 300
+set_from_resource $wm.power.ac_timeout wm.power.ac_timeout 900
+set_from_resource $wm.power.battery_timeout wm.power.battery_timeout 900
+
+exec swayidle -w timeout $wm.power.dim_timeout 'export curr_brightness=$(light); echo $curr_brightness | tee $XDG_RUNTIME_DIR/screen_brightness_old.var; if [ 1 -eq $(echo "${curr_brightness} > 30" | bc) ]; then light -S 30; fi' \
+                         resume 'light -S $(cat $XDG_RUNTIME_DIR/screen_brightness_old.var)' \
+                 timeout $wm.power.ac_timeout  'if on_ac_power; then $(trawlcat wm.program.lock "gtklock -d --background $(trawlcat regolith.lockscreen.wallpaper.file /dev/null)"); swaymsg "output * dpms off"; fi' \
+                         resume 'swaymsg "output * dpms on"' \
+                 timeout $wm.power.battery_timeout 'if ! on_ac_power; then systemctl suspend; fi' \
+                 before-sleep 'swaymsg "output * dpms off";$(trawlcat wm.program.lock "gtklock -d --background $(trawlcat regolith.lockscreen.wallpaper.file /dev/null)");playerctl -a pause;sleep 1' \
+                 after-resume 'swaymsg "output * dpms on"' \
+                 lock '$(trawlcat wm.program.lock "gtklock -d --background $(trawlcat regolith.lockscreen.wallpaper.file /dev/null)")'
