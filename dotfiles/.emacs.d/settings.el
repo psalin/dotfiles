@@ -18,6 +18,8 @@
 (setq backup-directory-alist '(("." . "~/.emacs.d/emacssaves")))
 ;; Don't create lock files
 (setq create-lockfiles nil)
+;; Follow symbolic links
+(setq vc-follow-symlinks t)
 
 ;; --- Indentation Settings ---
 ;; Use spaces instead of tabs
