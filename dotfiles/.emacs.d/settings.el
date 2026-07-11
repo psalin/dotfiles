@@ -13,7 +13,8 @@
 ;; Theme customization
 (setq custom-enabled-themes '(manoj-dark))
 (load-theme 'manoj-dark t)
-(load-theme 'org-beautify t)
+(when (display-graphic-p)
+  (load-theme 'org-beautify t))
 
 ;; Org-mode settings
 (setq org-startup-folded "nofold")
