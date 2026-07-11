@@ -18,6 +18,51 @@ function less_newest()
     find "$1" -maxdepth 1 -type "f" -printf "%T@ %p\n" | sort -n | cut -d' ' -f 2- | tail -n 1 | xargs less
 }
 
+# notify-when-done, sends a OSC 777 notification after a command, if it
+# exceeds NWD_THRESHOLD. Works for single command, wrap multi-command
+# sequences in bash -c
+#
+# Examples:
+# nwd my-command myparam
+# nwd bash -c "my-command | my-other-command"
+nwd() {
+    local threshold=${NWD_THRESHOLD:-60}
+
+    local start end duration exit_code
+    start=$(date +%s)
+
+    # Run the command
+    "$@"
+    exit_code=$?
+
+    end=$(date +%s)
+    local duration=$((end - start))
+
+    if (( duration >= threshold )); then
+	status=$([[ $exit_code -eq 0 ]] && echo "✓" || echo "✗")
+        local title="${status} Command finished"
+        local body="${*:1} ($duration seconds)"
+
+        _send_osc777 "$title" "$body"
+    fi
+
+    return $exit_code
+}
+
+_send_osc777() {
+    local title="$1"
+    local body="$2"
+
+    # Check if we're in tmux
+    if [[ -n "$TMUX" ]]; then
+        # In tmux, wrap with tmux escape sequence
+        printf '\033Ptmux;\033\033]777;notify;%s;%s\007\033'\\ "$title" "$body" > /dev/tty
+    else
+        # Outside tmux, send directly
+        printf '\033]777;notify;%s;%s\007' "$title" "$body" > /dev/tty
+    fi
+}
+
 # De-duplicates the bash history file
 function dedup_history() {
     local histfile="${HISTFILE}"
