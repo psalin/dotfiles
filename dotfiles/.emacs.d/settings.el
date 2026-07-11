@@ -12,6 +12,11 @@
 
 ;; Theme customization
 (setq custom-enabled-themes '(manoj-dark))
+(load-theme 'manoj-dark t)
+(load-theme 'org-beautify t)
+
+;; Org-mode settings
+(setq org-startup-folded "nofold")
 
 ;; --- File/Backup Settings ---
 ;; Store backup files in a dedicated directory
