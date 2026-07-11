@@ -47,14 +47,6 @@
 
 ;;; Settings
 
-(setq custom-file "~/.emacs.d/custom.el")
-(eval-and-compile
-  (load (emacs-path "settings"))
-  (when (file-exists-p (emacs-path "extra_settings.el"))
-    (load (emacs-path "extra_settings")))
-  (when (file-exists-p (emacs-path "custom.el"))
-    (load (emacs-path "custom"))))
-
 (which-key-mode t)
 (global-set-key (kbd "C-x f") #'nil)
 (global-set-key [(shift left)]  'bs-cycle-previous)
@@ -166,6 +158,9 @@
   :ensure t
   :bind (("C-x g" . magit-status)))
 
+(use-package org-beautify-theme
+  :ensure t)
+
 (use-package projectile
   :ensure t
   :defer t
@@ -181,5 +176,14 @@
 ;;; Load external config
 (when (file-exists-p (emacs-path "extra_init.el"))
   (load (emacs-path "extra_init")))
+
+;;; Load settings
+(setq custom-file "~/.emacs.d/custom.el")
+(eval-and-compile
+  (load (emacs-path "settings"))
+  (when (file-exists-p (emacs-path "extra_settings.el"))
+    (load (emacs-path "extra_settings")))
+  (when (file-exists-p (emacs-path "custom.el"))
+    (load (emacs-path "custom"))))
 
 ;;; init.el ends here
