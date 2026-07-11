@@ -158,8 +158,9 @@
   :ensure t
   :bind (("C-x g" . magit-status)))
 
-(use-package org-beautify-theme
-  :ensure t)
+(when (display-graphic-p)
+  (use-package org-beautify-theme
+    :ensure t))
 
 (use-package projectile
   :ensure t
