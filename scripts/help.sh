@@ -10,7 +10,7 @@ Available scripts:
   -s asdf                               Install asdf
   -s asdf install-tool <toolname>       Install <toolname> using asdf
   -s basepackages                       Install base packages
-  -s desktop                            Install i3 and other desktop related software
+  -s desktop                            Install regolith and other desktop related software
   -s emacs                              Install emacs
   -s tmux                               Install tmux
   -s zoxide                             Install zoxide
