@@ -8,6 +8,12 @@
 # for ssh logins, install and configure the libpam-umask package.
 # umask 022
 
+# Explicitly set XDG variables
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CACHE_HOME="$HOME/.cache"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
+
 # include user-specific bin directories
 if [ -d "$HOME/.local/bin" ] ; then
     PATH="$HOME/.local/bin:$PATH"
