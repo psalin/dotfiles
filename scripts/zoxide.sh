@@ -34,6 +34,7 @@ function install_from_github() {
     tar -xzf "${package}"
 
     __log_info "Copy zoxide to ${HOME}/.local/bin"
+    mkdir -p "${bin_dir}"
     cp -f ./zoxide "${bin_dir}"/zoxide
 }
 

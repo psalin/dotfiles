@@ -56,6 +56,10 @@ function utils::install_using_snap() {
             return 1
         fi
 
+        if ! run_cmd mkdir -p "${HOME}/.local/bin"; then
+            __log_error "Failed to create directory ${HOME}/.local/bin"
+            return 1
+        fi
         if ! run_cmd ln -sf "/snap/bin/${toolname}" "${HOME}/.local/bin/${toolname}"; then
             __log_error "Failed to create a symbolic link named ${toolname} to /snap/bin/${toolname}"
             return 1
@@ -131,6 +135,10 @@ function utils::download_github_release() {
     full_asset_url="https://github.com${asset_url}"
     __log_info "Downloading asset: ${full_asset_url}"
 
+    if ! run_cmd mkdir -p "${output_dir}"; then
+        __log_error "Failed to create output directory ${output_dir}"
+        return 1
+    fi
     pushd "${output_dir}" > /dev/null
     if ! run_cmd curl -L -O "${full_asset_url}"; then
         __log_error "Failed to download ${full_asset_url}"
@@ -176,6 +184,10 @@ function utils::download_github_tag_tarball() {
 
     full_asset_url="https://github.com${asset_url}"
 
+    if ! run_cmd mkdir -p "${output_dir}"; then
+        __log_error "Failed to create output directory ${output_dir}"
+        return 1
+    fi
     pushd "${output_dir}" > /dev/null
     if ! run_cmd curl -L -O "${full_asset_url}"; then
         __log_error "Failed to download ${full_asset_url}"

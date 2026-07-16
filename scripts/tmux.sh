@@ -122,6 +122,7 @@ function install_from_sources() {
 
     # Copy the built binary to .local/bin
     __log_info "Copying tmux to ${HOME}/.local/bin"
+    mkdir -p "${HOME}"/.local/bin
     if [ -f "${HOME}"/.local/bin/tmux ]; then
         cp -f "${HOME}"/.local/bin/tmux "${HOME}"/.local/bin/tmux.old
     fi

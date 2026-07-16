@@ -88,6 +88,7 @@ function install_from_sources() {
 
     # Copy the built binary to .local/bin
     __log_info "Symlink emacs to ${HOME}/.local/bin"
+    mkdir -p "${bin_dir}"
     rm -f "${bin_dir}"/emacs
     ln -s "${install_dir}"/bin/emacs "${bin_dir}"/emacs
 }
