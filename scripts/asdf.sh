@@ -6,6 +6,13 @@ dir_path=$(dirname -- "${BASH_SOURCE[0]}")
 source "${dir_path}/utils.inc.sh"
 set -euo pipefail
 
+# asdf is installed to ~/.local/bin, which might not be on PATH yet during
+# installation. Add it if needed so that install-tool calls work.
+case ":${PATH}:" in
+    *":${HOME}/.local/bin:"*) ;;
+    *) export PATH="${HOME}/.local/bin:${PATH}" ;;
+esac
+
 function usage() {
     echo "$(basename "${BASH_SOURCE[0]}") [install]                          Installs asdf"
     echo "$(basename "${BASH_SOURCE[0]}") install-tool <name> [<version>]    Installs a specific or the latest version of a tool"
