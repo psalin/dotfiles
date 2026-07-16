@@ -137,7 +137,6 @@ function install_tmux_tpm() {
         # Update existing installation
         if git -C "$tpm_dir" pull; then
             __log_success "tmux tpm updated, please reload tmux."
-	    return 0
         else
             __log_error "Failed to update tmux tpm."
 	    return 1
@@ -146,11 +145,36 @@ function install_tmux_tpm() {
         # Fresh install
         if git clone https://github.com/tmux-plugins/tpm "$tpm_dir"; then
             __log_success "tmux tpm installed, please reload tmux."
-	    return 0
         else
             __log_error "Failed to install tmux tpm."
 	    return 1
         fi
+    fi
+
+    install_tmux_plugins "$tpm_dir" && update_tmux_plugins "$tpm_dir"
+}
+
+function install_tmux_plugins() {
+    local -r tpm_dir="$1"
+
+    __log_info "Installing tmux plugins"
+    if run_cmd "${tpm_dir}/bin/install_plugins"; then
+        __log_success "tmux plugins installed."
+    else
+        __log_error "Failed to install tmux plugins."
+        return 1
+    fi
+}
+
+function update_tmux_plugins() {
+    local -r tpm_dir="$1"
+
+    __log_info "Updating tmux plugins"
+    if run_cmd "${tpm_dir}/bin/update_plugins" all; then
+        __log_success "tmux plugins updated."
+    else
+        __log_error "Failed to update tmux plugins."
+        return 1
     fi
 }
 
